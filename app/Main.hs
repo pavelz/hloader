@@ -18,6 +18,7 @@ main = do
   putStrLn "Hello, Haskell!"
   print $ Socket.socket
   let htmlfoo = [shamlet|
-        dasdassadsad
-        |] 
+        <b>
+          first html from haskell!
+       |] 
   putStrLn $ renderHtml htmlfoo
