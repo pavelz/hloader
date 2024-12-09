@@ -68,7 +68,7 @@ executable hloader
     main-is:          Main.hs
 
     -- Modules included in this executable, other than Main.
-    -- other-modules: Socket
+    -- other-modules: Text.Hamlet
 
     other-modules: Paths_hloader
     -- LANGUAGE extensions used by modules in this package.
@@ -77,7 +77,9 @@ executable hloader
     -- Other library packages from which modules are imported.
     build-depends:    base ^>=4.17.1.0,
                       hloader,
-                      network >= 3.2.0
+                      network >= 3.2.0,
+                      shakespeare >= 2.1.0.1,
+                      blaze-html >= 0.9.2.0
 
     -- Directories containing source files.
     hs-source-dirs:   app
