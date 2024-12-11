@@ -1,11 +1,8 @@
-{-# LANGUAGE QuasiQuotes #-}
 
 module Main where
 
 import Socket
-import Text.Hamlet (shamlet)
-import Text.Blaze.Html.Renderer.String (renderHtml)
-
+import Data.Typeable
 
 -- what is the hloader
 -- load url into files and serve them to the visitor
@@ -17,8 +14,7 @@ main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
   print $ Socket.socket
-  let htmlfoo = [shamlet|
-        <b>
-          first html from haskell!
-       |] 
-  putStrLn $ renderHtml htmlfoo
+  mapM_ putChar ( show (typeOf putStrLn) :: String)
+  putStrLn ""
+
+  putStrLn htmlfoo
