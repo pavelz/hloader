@@ -14,7 +14,6 @@ main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
   print $ Socket.socket
-  mapM_ putChar ( show (typeOf putStrLn) :: String)
-  putStrLn ""
+  print  (typeOf putStrLn)
 
   putStrLn htmlfoo
