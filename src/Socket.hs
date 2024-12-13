@@ -12,5 +12,5 @@ htmlfoo = do
       renderHtml [shamlet|
         <b>
           first html from haskell!
-       |] 
+      |] 
 
