@@ -13,7 +13,7 @@ import Data.Typeable
 main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
-  print $ Socket.socket
-  print  (typeOf putStrLn)
+  print Socket.socket
+  print (typeOf putStrLn)
 
   putStrLn htmlfoo
