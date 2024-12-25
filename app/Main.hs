@@ -1,7 +1,7 @@
 
 module Main where
 
-import Socket
+import Server
 import Data.Typeable
 
 -- what is the hloader
@@ -13,7 +13,7 @@ import Data.Typeable
 main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
-  print Socket.socket
   print (typeOf putStrLn)
 
+  server
   putStrLn htmlfoo
