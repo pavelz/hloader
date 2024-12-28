@@ -6,7 +6,7 @@ import Data.Bits
 import Network.Socket
 import Network.URI
 import Data.List
-import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn)
+import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile)
 
 import Text.Hamlet (shamlet)
 import Text.Blaze.Html.Renderer.String (renderHtml)
@@ -17,6 +17,7 @@ server = do
                     (Just (defaultHints {addrFlags = [AI_PASSIVE]}))
                     Nothing
                     (Just "9999")
+
     let serveraddr = head addrinfos
     sock <- socket (addrFamily serveraddr) Stream defaultProtocol -- make socket
     bind sock (addrAddress serveraddr) -- bind socket to port
@@ -24,18 +25,19 @@ server = do
     (sClient, _) <- accept sock -- accept the socket and save as sClient
     putStrLn "New connection accepted"
     hClient <- socketToHandle sClient ReadWriteMode -- create a handle for the client
-    hPutStrLn hClient htmlfoo
+    file <- htmlfoo "file.htm"
+    hPutStrLn hClient file
     msg <- hGetLine hClient -- recieve message from the client
     putStrLn msg
     close sClient -- close
     close sock
     hClose hClient
 
-
-htmlfoo :: [Char]
-htmlfoo = do 
-      renderHtml [shamlet|
+htmlfoo :: FilePath -> IO String
+htmlfoo filePath = do
+      textfile <- readFile filePath
+      return $ renderHtml [shamlet|
         <b>
           Merry Christmas!
-      |] 
-
+          #{textfile}
+        |] 

@@ -16,4 +16,3 @@ main = do
   print (typeOf putStrLn)
 
   server
-  putStrLn htmlfoo
