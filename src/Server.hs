@@ -10,6 +10,7 @@ import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, r
 
 import Text.Hamlet (shamlet)
 import Text.Blaze.Html.Renderer.String (renderHtml)
+import Text.Blaze.Html4.FrameSet (object)
 
 server :: IO()
 server = do
@@ -41,3 +42,11 @@ htmlfoo filePath = do
           Merry Christmas!
           #{textfile}
         |] 
+        
+
+loadFile :: FilePath -> IO String
+loadFile filePath = do
+    -- connect
+    -- load 
+    -- return file object
+    return ""
