@@ -5,12 +5,13 @@ module Server where
 import Data.Bits
 import Network.Socket
 import Network.URI
+--import Network.HTTP as (http)
 import Data.List
 import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile)
 
 import Text.Hamlet (shamlet)
 import Text.Blaze.Html.Renderer.String (renderHtml)
-import Text.Blaze.Html4.FrameSet (object)
+import Text.Blaze.Html4.FrameSet (object, link)
 
 server :: IO()
 server = do
@@ -42,11 +43,16 @@ htmlfoo filePath = do
           Merry Christmas!
           #{textfile}
         |] 
-        
 
-loadFile :: FilePath -> IO String
-loadFile filePath = do
+loadFile :: String -> IO String
+loadFile uriLoc = do
+    -- parts of href link
+    let uri = parseURI uriLoc 
+    case uri of 
+      Just uri -> print uri
+      Nothing -> print "ruh row"
     -- connect
     -- load 
     -- return file object
+  
     return ""
