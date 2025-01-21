@@ -1,10 +1,11 @@
 {-# LANGUAGE QuasiQuotes #-}
+{-# LANGUAGE BlockArguments #-}
 
 module Server where
 
 import Data.Bits
 import Network.Socket
-import Network.URI
+import Network.URI (parseURI, nullURI)
 --import Network.HTTP as (http)
 import Data.List
 import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile)
@@ -46,13 +47,9 @@ htmlfoo filePath = do
 
 loadFile :: String -> IO String
 loadFile uriLoc = do
-    -- parts of href link
-    let uri = parseURI uriLoc 
-    case uri of 
-      Just uri -> print uri
-      Nothing -> print "ruh row"
-    -- connect
-    -- load 
-    -- return file object
-  
+  -- parts of href link
+    let uri = case parseURI uriLoc of 
+         Just u -> u
+         Nothing -> nullURI
+    print uri
     return ""

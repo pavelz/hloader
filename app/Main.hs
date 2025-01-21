@@ -14,5 +14,7 @@ main :: IO ()
 main = do
   putStrLn "Hello, Haskell!"
   print (typeOf putStrLn)
+  _ <- loadFile "http://google.ca/"
+
 
   server
