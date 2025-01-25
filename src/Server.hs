@@ -5,7 +5,7 @@ module Server where
 
 import Data.Bits
 import Network.Socket
-import Network.URI (parseURI, nullURI)
+import Network.URI (parseURI, nullURI, URI, URIAuth, uriAuthority, uriRegName)
 --import Network.HTTP as (http)
 import Data.List
 import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile)
@@ -32,7 +32,7 @@ server = do
     hPutStrLn hClient file
     msg <- hGetLine hClient -- recieve message from the client
     putStrLn msg
-    close sClient -- close
+    close sClient -- close:where
     close sock
     hClose hClient
 
@@ -45,11 +45,12 @@ htmlfoo filePath = do
           #{textfile}
         |] 
 
-loadFile :: String -> IO String
+loadFile :: String -> Maybe String
 loadFile uriLoc = do
   -- parts of href link
-    let uri = case parseURI uriLoc of 
-         Just u -> u
-         Nothing -> nullURI
-    print uri
-    return ""
+    uri <- parseURI uriLoc 
+    ua <- uriAuthority uri
+    let host = uriRegName ua
+    let hints = defaultHints { addrFlags = [AI_NUMERICHOST], addrSocketType = Stream }
+    let addrs =  getAddrInfo (Just hints) (Just host) (Just "https")
+    return host
