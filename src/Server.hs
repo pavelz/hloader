@@ -45,12 +45,21 @@ htmlfoo filePath = do
           #{textfile}
         |] 
 
-loadFile :: String -> Maybe String
+loadFile :: String -> IO (Maybe String)
 loadFile uriLoc = do
   -- parts of href link
-    uri <- parseURI uriLoc 
-    ua <- uriAuthority uri
-    let host = uriRegName ua
-    let hints = defaultHints { addrFlags = [AI_NUMERICHOST], addrSocketType = Stream }
-    let addrs =  getAddrInfo (Just hints) (Just host) (Just "https")
-    return host
+    case parseURI uriLoc of
+      Just uri -> case uriAuthority uri of
+        Just ua -> do
+                          let host = uriRegName ua
+                          let hints = defaultHints {
+                              addrFlags = []
+                            , addrSocketType = Datagram
+                            , addrFamily = AF_INET
+                            }
+                          addrs <- getAddrInfo (Just hints) (Just host) (Just "9999")
+                          print $ head addrs
+                          return (Just host)
+        Nothing -> return Nothing
+      Nothing -> return Nothing
+
