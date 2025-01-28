@@ -46,8 +46,8 @@ htmlfoo filePath = do
           #{textfile}
         |] 
 
-loadFile :: String -> IO (Maybe Handle)
-loadFile uriLoc = do
+getConnectHandle :: String -> IO (Maybe Handle)
+getConnectHandle uriLoc = do
   -- parts of href link
     case parseURI uriLoc of
       Just uri -> case uriAuthority uri of
