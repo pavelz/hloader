@@ -46,7 +46,7 @@ htmlfoo filePath = do
           #{textfile}
         |] 
 
-loadFile :: String -> IO (Maybe String)
+loadFile :: String -> IO (Maybe Handle)
 loadFile uriLoc = do
   -- parts of href link
     case parseURI uriLoc of
@@ -66,6 +66,6 @@ loadFile uriLoc = do
                           h <- socketToHandle sock ReadWriteMode
                           hSetBuffering h (BlockBuffering Nothing)
                           
-                          return (Just host)
+                          return (Just h)
         Nothing -> return Nothing
       Nothing -> return Nothing
