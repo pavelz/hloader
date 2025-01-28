@@ -3,16 +3,17 @@
 
 module Server where
 
+import System.IO (BufferMode(..), hGetLine, hPutStrLn, hSetBuffering)
 import Data.Bits
 import Network.Socket
 import Network.URI (parseURI, nullURI, URI, URIAuth, uriAuthority, uriRegName)
 --import Network.HTTP as (http)
 import Data.List
-import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile)
+import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile, hSetBuffering)
 
 import Text.Hamlet (shamlet)
 import Text.Blaze.Html.Renderer.String (renderHtml)
-import Text.Blaze.Html4.FrameSet (object, link)
+import Text.Blaze.Html4.FrameSet (object, link, h1)
 
 server :: IO()
 server = do
@@ -59,7 +60,12 @@ loadFile uriLoc = do
                             }
                           addrs <- getAddrInfo (Just hints) (Just host) (Just "9999")
                           print $ head addrs
+                          sock <- socket (addrFamily $ head addrs) Stream defaultProtocol
+                          setSocketOption sock KeepAlive 1 
+                          connect sock (addrAddress $ head addrs)
+                          h <- socketToHandle sock ReadWriteMode
+                          hSetBuffering h (BlockBuffering Nothing)
+                          
                           return (Just host)
         Nothing -> return Nothing
       Nothing -> return Nothing
-
