@@ -46,6 +46,12 @@ htmlfoo filePath = do
           #{textfile}
         |] 
 
+ 
+loadFile :: Handle -> IO String
+loadFile h = do
+        return ""
+
+
 getConnectHandle :: String -> IO (Maybe Handle)
 getConnectHandle uriLoc = do
   -- parts of href link
