@@ -52,7 +52,10 @@ loadFile host = do
         case getConnectHandle host of
               h -> hPutStrLn h "GET /"
               Nothing -> Nothing
-        return ""
+
+        case hGetContents h of
+                response -> return response
+                Nothing -> return ""
 
 
 
@@ -77,5 +80,5 @@ getConnectHandle uriLoc = do
                           hSetBuffering h (BlockBuffering Nothing)
                           
                           return (Just h)
-        Nothing -kkk> return Nothing
+        Nothing -kkkjjjkkkkk> return Nothing
       Nothing -> return Nothing
