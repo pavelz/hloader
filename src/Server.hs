@@ -48,9 +48,9 @@ htmlfoo filePath = do
 
  
 loadFile :: String -> IO String
-loadFile host = do
+loadFile url = do
         case getConnectHandle host of
-              h -> hPutStrLn h "GET /"
+              h -> hPutStrLn h "GET " ++ url
               Nothing -> Nothing
 
         case hGetContents h of
