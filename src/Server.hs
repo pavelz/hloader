@@ -9,7 +9,7 @@ import Network.Socket
 import Network.URI (parseURI, nullURI, URI, URIAuth, uriAuthority, uriRegName)
 --import Network.HTTP as (http)
 import Data.List
-import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile, hSetBuffering)
+import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile, hSetBuffering, hPutBuf)
 
 import Text.Hamlet (shamlet)
 import Text.Blaze.Html.Renderer.String (renderHtml)
@@ -47,9 +47,13 @@ htmlfoo filePath = do
         |] 
 
  
-loadFile :: Handle -> IO String
-loadFile h = do
+loadFile :: String -> IO String
+loadFile host = do
+        case getConnectHandle host of
+              h -> hPutStrLn h "GET /"
+              Nothing -> Nothing
         return ""
+
 
 
 getConnectHandle :: String -> IO (Maybe Handle)
@@ -73,5 +77,5 @@ getConnectHandle uriLoc = do
                           hSetBuffering h (BlockBuffering Nothing)
                           
                           return (Just h)
-        Nothing -> return Nothing
+        Nothing -kkk> return Nothing
       Nothing -> return Nothing
