@@ -11,7 +11,7 @@ import Network.URI (parseURI, nullURI, URI, URIAuth, uriAuthority, uriRegName)
 import Data.List
 import System.IO (IOMode (..),  Handle, hClose, hGetLine, hPutStrLn, openFile, readFile, hSetBuffering, hPutBuf)
 
-import Text.Hamlet (shamlet)
+import Text.Hamlet (shamlet, HamletSettings (hamletDoctype))
 import Text.Blaze.Html.Renderer.String (renderHtml)
 import Text.Blaze.Html4.FrameSet (object, link, h1)
 
@@ -49,13 +49,16 @@ htmlfoo filePath = do
  
 loadFile :: String -> IO String
 loadFile url = do
-        case getConnectHandle host of
-              h -> hPutStrLn h "GET " ++ url
-              Nothing -> Nothing
-
-        case hGetContents h of
-                response -> return response
-                Nothing -> return ""
+        h <- getConnectHandle url 
+        case h of
+              Just h -> do
+                        hPutStrLn h $ "GET " ++ url
+                        return ""
+              Nothing -> return ""
+        return ""
+        --case hGetContents h of
+                --response -> return response
+                --Nothing -> return ""
 
 
 
@@ -80,5 +83,5 @@ getConnectHandle uriLoc = do
                           hSetBuffering h (BlockBuffering Nothing)
                           
                           return (Just h)
-        Nothing -kkkjjjkkkkk> return Nothing
+        Nothing -> return Nothing
       Nothing -> return Nothing
