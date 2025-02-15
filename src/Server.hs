@@ -2,8 +2,9 @@
 {-# LANGUAGE BlockArguments #-}
 
 module Server where
-
-import System.IO (BufferMode(..), hGetLine, hPutStrLn, hSetBuffering)
+import Data.Typeable
+import System.IO (BufferMode(..), hGetContents, hSetBuffering, hGetLine, hPutStrLn, hSetBuffering)
+import Data.Char (isSpace)
 import Data.Bits
 import Network.Socket
 import Network.URI (parseURI, nullURI, URI, URIAuth, uriAuthority, uriRegName)
@@ -44,18 +45,44 @@ htmlfoo filePath = do
         <b>
           Merry Christmas!
           #{textfile}
-        |] 
+        |]
 
+hGetLines :: Handle -> IO [String]
+hGetLines h = do
+  print "wat"
+  l <- hGetLine h
+  if all isSpace l
+    then return []
+    else do
+      ls <- hGetLines h
+      return (l : ls)
  
 loadFile :: String -> IO String
 loadFile url = do
+
         h <- getConnectHandle url 
         case h of
               Just h -> do
-                        hPutStrLn h $ "GET " ++ url
+                        print $ "GET " ++ url
+                        hPutStrLn h $ "GET / HTTP/1.1"
+                        hPutStrLn h "Host: eu.httpbin.org"
+                        hPutStrLn h ""
+                        d <- hGetLines h
+                        case d of
+                               d -> do 
+                                        print "WAT"
+                                        print "O"
+                                        putStrLn $ show(d)
+                                        print "CONE"
+                                        return ""
+                               [] -> return ""
+
+                        hClose h
                         return ""
               Nothing -> return ""
+
         return ""
+    
         --case hGetContents h of
                 --response -> return response
                 --Nothing -> return ""
@@ -74,13 +101,13 @@ getConnectHandle uriLoc = do
                             , addrSocketType = Datagram
                             , addrFamily = AF_INET
                             }
-                          addrs <- getAddrInfo (Just hints) (Just host) (Just "9999")
+                          addrs <- getAddrInfo (Just hints) (Just host) (Just "80")
                           print $ head addrs
                           sock <- socket (addrFamily $ head addrs) Stream defaultProtocol
                           setSocketOption sock KeepAlive 1 
                           connect sock (addrAddress $ head addrs)
                           h <- socketToHandle sock ReadWriteMode
-                          hSetBuffering h (BlockBuffering Nothing)
+                          hSetBuffering h LineBuffering
                           
                           return (Just h)
         Nothing -> return Nothing
