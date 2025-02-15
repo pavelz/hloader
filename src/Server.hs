@@ -72,7 +72,8 @@ loadFile url = do
                                d -> do 
                                         print "WAT"
                                         print "O"
-                                        putStrLn $ show(d)
+                                        putStrLn $ show(typeOf d)
+                                        mapM_ putStrLn d
                                         print "CONE"
                                         return ""
                                [] -> return ""
