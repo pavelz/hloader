@@ -68,18 +68,11 @@ loadFile url = do
                         hPutStrLn h "Host: eu.httpbin.org"
                         hPutStrLn h ""
                         d <- hGetLines h
-                        case d of
-                               d -> do 
-                                        print "WAT"
-                                        print "O"
-                                        putStrLn $ show(typeOf d)
-                                        mapM_ putStrLn d
-                                        print "CONE"
-                                        return ""
-                               [] -> return ""
-
+                        putStrLn $ show(typeOf d)
+                        mapM_ putStrLn d
+                        let f = (foldr (\a b -> a ++ "\n" ++ b) "" d)
                         hClose h
-                        return ""
+                        return f
               Nothing -> return ""
 
         return ""
